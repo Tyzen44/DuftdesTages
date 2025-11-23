@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>🧴 Duft des Tages</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .parfum-display {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .parfum-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .parfum-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .parfum-brand {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .parfum-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .detail-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .notes-box {
+            margin-top: 20px;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .notes-box strong {
+            display: inline-block;
+            min-width: 65px;
+            color: #333;
+        }
+
+        .note-item {
+            margin-bottom: 10px;
+        }
+
+        .note-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .progress-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .history-card {
+            margin-top: 20px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .history-brand {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .reset-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .collapse-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 15px 0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .collapse-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .collapse-icon {
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .collapse-icon.open {
+            transform: rotate(180deg);
+        }
+
+        .collapse-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapse-content.open {
+            max-height: 1000px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧴 Duft des Tages</h1>
+            <div class="subtitle">Deine tägliche Duft-Empfehlung</div>
+        </div>
+
+        <div class="card">
+            <div id="parfumDisplay"></div>
+            <div id="buttonGroup"></div>
+            
+            <div class="progress-section">
+                <div class="progress-info">
+                    <span id="progressText">0/49 Düfte verwendet</span>
+                    <span id="roundText">Durchgang 1</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card stats-grid">
+            <div class="stat-box">
+                <div class="stat-number" id="totalUsed">0</div>
+                <div class="stat-label">Düfte benutzt</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="currentRound">1</div>
+                <div class="stat-label">Durchgang</div>
+            </div>
+        </div>
+
+        <div class="card history-card">
+            <div class="collapse-header" onclick="toggleHistory()">
+                <div class="collapse-title">📜 Letzte 10 Düfte</div>
+                <div class="collapse-icon" id="historyIcon">▼</div>
+            </div>
+            <div class="collapse-content" id="historyContent">
+                <div id="historyList"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <button class="reset-btn" onclick="resetAll()">🔄 Komplett zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        // Alle Parfüms (ohne Éclair und Angham) - mit vollständigen Details
+        const allParfums = [
+            {name: "Hercules", brand: "Maison Alhambra", family: "Orientalisch-Würzig", kopf: "Zimt, Pfeffer", herz: "Tabakblatt, Weihrauch, Labdanum, Osmanthus", basis: "Vanille, Zeder, Moschus, Vetiver", duration: "7.5h", dupeOf: "Parfums de Marly Herod"},
+            {name: "Asad", brand: "Lattafa", family: "Orientalisch-Amber", kopf: "Schwarzer Pfeffer, Ananas, Tabak", herz: "Kaffee, Patschuli, Iris", basis: "Vanille, Amber, Trockene Hölzer, Benzoe", duration: "10.0h", dupeOf: "Dior Sauvage Élixir"},
+            {name: "Club De Nuit Intense", brand: "Armaf", family: "Holzig-Würzig", kopf: "Zitrone, Ananas, Bergamotte, Cassis, Apfel", herz: "Birke, Jasmin, Rose", basis: "Moschus, Amber, Patschuli, Vanille", duration: "9.0h", dupeOf: "Creed Aventus"},
+            {name: "Dark Door Intense", brand: "Maison Alhambra", family: "Aromatisch-Blumig", kopf: "Lavendel", herz: "Iris, Ambrette, Birne", basis: "Virginia Zeder, Vetiver", duration: "7.0h", dupeOf: "Dior Homme Intense 2011"},
+            {name: "Dynasty", brand: "Lattafa", family: "Holzig-Würzig", kopf: "Bergamotte, Ingwer, Himbeere", herz: "Rooibos Tee, Wildleder", basis: "Zedernholz, Cashmeran, Amberholz", duration: "8.5h", dupeOf: "Clive Christian L: Red Tea Vetiver"},
+            {name: "Pride Art of Arabia I", brand: "Lattafa", family: "Frisch-Zitrus", kopf: "Bergamotte, Minze", herz: "Schwarzer Tee, Ingwer, Lavendel", basis: "Ambroxan, Weihrauch, Zimt", duration: "7.0h", dupeOf: "Louis Vuitton Imagination"},
+            {name: "Infini Moschus", brand: "Maison Alhambra", family: "Blumig-Holzig-Moschus", kopf: "Bergamotte, Mandarine", herz: "Moschus, Maiglöckchen, Veilchen", basis: "Weißer Moschus, Sandelholz", duration: "6.0h", dupeOf: "Initio Musk Therapy"},
+            {name: "Eternal Oud Pride", brand: "Lattafa", family: "Orientalisch-Süß", kopf: "Pflaume, Grapefruit", herz: "Heliotrop, Orchidee", basis: "Benzoe, Amber, Vanille, Oud", duration: "9.0h", dupeOf: "MFK Grand Soir"},
+            {name: "Confidential Private Gold", brand: "Lattafa", family: "Chypre-Fruchtig", kopf: "Pfirsich, Birne, Passionsfrucht, Himbeere", herz: "Maiglöckchen", basis: "Moschus, Vanille, Sandelholz", duration: "7.0h", dupeOf: "Tiziana Terenzi Kirke"},
+            {name: "Kismet Magic", brand: "Maison Alhambra", family: "Orientalisch-Vanille", kopf: "Cognac", herz: "Zimt, Tonkabohne, Eiche", basis: "Vanille, Praline, Sandelholz", duration: "8.5h", dupeOf: "Kilian Angels' Share"},
+            {name: "Opulent Dubai", brand: "Lattafa", family: "Orientalisch-Blumig", kopf: "Mango, Grapefruit, Zitrone, Ingwer", herz: "Jasmin, Zedernholz, Veilchen", basis: "Holzige Noten, Benzoin, Ambergris, Eichenmoos", duration: "6.0h", dupeOf: "SHL God of Fire"},
+            {name: "The Kingdom", brand: "Lattafa", family: "Aromatisch-Fougère", kopf: "Lavendel, Minze, Salbei", herz: "Vanille, Tabak, Orangenblüte", basis: "Tonkabohne, Benzoin, Labdanum", duration: "7.0h", dupeOf: "JPG Le Male Elixir"},
+            {name: "Niche Emarati Classic Stone", brand: "Lattafa", family: "Orientalisch-Würzig", kopf: "Kardamom, Safran, Kreuzkümmel, Veilchen", herz: "Wildleder, Muskatnuss, Nelke, Osmanthus", basis: "Ambergris, Holzige Noten, Moschus, Eichenmoos", duration: "8.5h", dupeOf: "Parfums de Marly Althair"},
+            {name: "Khamrah", brand: "Lattafa", family: "Orientalisch-Würzig", kopf: "Zimt, Muskatnuss, Bergamotte", herz: "Datteln, Praline, Tuberose", basis: "Vanille, Tonkabohne, Amberholz", duration: "10.0h", dupeOf: "Kilian Angels' Share"},
+            {name: "Khamrah Qahwa", brand: "Lattafa", family: "Oriental-Gourmand", kopf: "Zimt, Kardamom, Ingwer", herz: "Praline, Kandierte Früchte, Weiße Blüten", basis: "Kaffee, Vanille, Tonkabohne, Benzoe", duration: "11.0h", dupeOf: "Mancera Amore Caffè"},
+            {name: "Niche Emarati Zikra", brand: "Lattafa", family: "Oriental-Woody", kopf: "Cognac", herz: "Zimt, Tonkabohne, Eichenmoos", basis: "Praline, Vanille, Sandelholz", duration: "7.0h", dupeOf: "Kilian Angels' Share"},
+            {name: "Niche Emarati Mughal Fort", brand: "Lattafa", family: "Oriental-Vanilla", kopf: "Kardamom, Piment", herz: "Zedernholz, Karamell", basis: "Vanille, Moschus, Amberholz", duration: "7.0h", dupeOf: "BDK Gris Charnel"},
+            {name: "Nasheet", brand: "Lattafa", family: "Holzig-Aromatisch", kopf: "Guajakholz", herz: "Muskatnuss", basis: "Weihrauch, Sandelholz, Cashmeran", duration: "7.0h", dupeOf: "Nishane Ani"},
+            {name: "Pride La Collection 1505", brand: "Lattafa", family: "Aromatisch-Fruchtig", kopf: "Schwarze Kirsche, Safran", herz: "Weihrauch, Osmanthus, Amyris", basis: "Guajakholz, Styrax, Cypriol", duration: "8.0h", dupeOf: "Tom Ford Cherry Smoke"},
+            {name: "Pride Ajwaa", brand: "Lattafa", family: "Oriental-Gourmand", kopf: "Bergamotte, Elemi, Datteln, Zitrone", herz: "Jasmin, Datteln, Lakritz, Myrrhe", basis: "Benzoe, Weihrauch, Labdanum, Moschus", duration: "7.0h", dupeOf: "Penhaligon's Legacy of Petra"},
+            {name: "Pride Artisan Ethnique", brand: "Lattafa", family: "Amber-Süß", kopf: "Rum, Zimt, Zucker", herz: "Karamell, Kakao, Kaffee, Eichenmoos", basis: "Vanille, Tonkabohne, Kaschmirholz", duration: "12.0h", dupeOf: "BORNTOSTANDOUT Sugar Addict"},
+            {name: "Art of Arabia III", brand: "Lattafa", family: "Aromatisch-Würzig", kopf: "Weihrauch, Davana, Bergamotte", herz: "Datteln, Tabak, Sandelholz", basis: "Myrrhe, Vanille, Labdanum", duration: "9.0h", dupeOf: "Clive Christian Blonde Amber"},
+            {name: "Art Of Nature II", brand: "Lattafa", family: "Frisch-Blumig", kopf: "Weihrauch, Mandarine, Apfel", herz: "Kardamom, Orangenblüte, Rose", basis: "Vanille, Moschus, Zedernholz", duration: "7.0h", dupeOf: "Parfums de Marly Althair"},
+            {name: "Vintage Radio", brand: "Lattafa", family: "Orientalisch-Holzig", kopf: "Lavendel, Salbei, Bergamotte", herz: "Pflaume, Palo Santo, Pfeffer", basis: "Sandelholz, Oud", duration: "10.0h", dupeOf: "Initio Paragon"},
+            {name: "Sehr", brand: "Lattafa", family: "Orientalisch-Blumig", kopf: "Bittermandel, Zimt", herz: "Jasmin, Pomarose, Akigalawood", basis: "Vanille Absolute, Tonkabohne, Amber", duration: "8.0h", dupeOf: "Tom Ford Vanilla Sex"},
+            {name: "Luxe Journey", brand: "Maison Alhambra", family: "Oriental-Floral", kopf: "Birne, Schwarze Johannisbeere, Quitte", herz: "Rose, Iris, Veilchenblätter", basis: "Amber, Vanille, Sandelholz", duration: "10.0h", dupeOf: "Bond No. 9 NoMad"},
+            {name: "Luxury Emerald", brand: "Maison Alhambra", family: "Floral-Fruity", kopf: "Litschi, Mandarine, Cassis, Pfirsich", herz: "Seerose, Pfirsich, Jasmin", basis: "Ambroxan, Vanille, Moschus, Praline", duration: "7.5h", dupeOf: "Bond No. 9 Greenwich Village"},
+            {name: "Sceptre Malachite", brand: "Maison Alhambra", family: "Oriental-Woody", kopf: "Grüne Mandarine, Bergamotte, Cassis", herz: "Lavendel, Rosa Pfeffer, Geranium", basis: "Amber, Moschus, Vetiver", duration: "12.0h", dupeOf: "SHL 777 God of Fire"},
+            {name: "Forbidden Love", brand: "Maison Alhambra", family: "Süß-Fruchtig", kopf: "Bittermandel, Rose", herz: "Kirsche, Schwarzkirsche", basis: "Tonkabohne, Toffee, Peru Balsam", duration: "5.0h", dupeOf: "Tom Ford Lost Cherry"},
+            {name: "Oud for Glory", brand: "Lattafa", family: "Orientalisch, Oud", kopf: "Safran, Nussig", herz: "Oud, Amber", basis: "Oud, Moschus, Sandelholz", duration: "8.0h", dupeOf: "Initio Oud for Greatness"},
+            {name: "Liquid Brun", brand: "French Avenue", family: "Holzig-Oriental", kopf: "Zimt, Orangenblüte, Kardamom, Bergamotte", herz: "Bourbon Vanille, Elemi", basis: "Praline, Ambroxan, Guajakholz, Moschus", duration: "8.0h", dupeOf: "Parfums de Marly Althair"},
+            {name: "Odyssey Homme", brand: "Armaf", family: "Oriental-Blumig", kopf: "Mandarine, Neroli, Kardamom", herz: "Rose, Orangenblüte", basis: "Sandelholz, Vanille, Amber, Holzige Akkorde", duration: "7.5h", dupeOf: "Diverse Designer-Düfte"},
+            {name: "Club De Nuit Precieux", brand: "Armaf", family: "Chypre-Amber", kopf: "Ananas, Zitrone, Bergamotte, Karamell, Birne, Rosa Pfeffer, Schwarzer Pfeffer", herz: "Eichenmoos, Weißes Holz, Jasmin, Maiglöckchen, Anis", basis: "Ambroxan, Weißer Moschus, Patschuli, Amber, Vanille, Leder, Zeder", duration: "9.0h", dupeOf: "Creed Aventus Absolu"},
+            {name: "Liam Grey", brand: "Lattafa", family: "Oriental-Würzig", kopf: "Kardamom, Schwarzer Tee, Feige", herz: "Iris, Vetiver, Labdanum", basis: "Vanille, Sandelholz, Tonkabohne, Patchouli", duration: "8.0h", dupeOf: "BDK Gris Charnel"},
+            {name: "Eternal Touch", brand: "Maison Alhambra", family: "Oriental-Gourmand", kopf: "Tabakblatt, Würzige Noten", herz: "Vanille, Tonkabohne, Tabakblüte, Kakao", basis: "Getrocknete Früchte, Holzige Noten", duration: "9.0h", dupeOf: "Tom Ford Tobacco Vanille"},
+            {name: "Philos Centro", brand: "Maison Alhambra", family: "Blumig-Chypre", kopf: "Hyazinthe, Ananas", herz: "Iris, Rosa Pfeffer, Jasmin", basis: "Moschus, Vetiver, Vanille, Amber, Patchouli", duration: "7.0h", dupeOf: "Xerjoff Accento"},
+            {name: "Azzure Aoud", brand: "French Avenue", family: "Oriental-Leder", kopf: "Passionsfrucht, Fruchtige Noten, Rose, Safran", herz: "Oud, Patchouli, Benzoe", basis: "Leder, Guajakholz, Amber, Vanille, Zedernholz, Sandelholz, Labdanum", duration: "10.0h", dupeOf: "MFK Oud Maracuja"},
+            {name: "9 PM", brand: "Afnan", family: "Oriental-Gourmand", kopf: "Bergamotte, Lavendel, Zimt, Apfel", herz: "Maiglöckchen, Orangenblüte", basis: "Patchouli, Amber, Vanille, Tonkabohne", duration: "8.0h", dupeOf: "Jean Paul Gaultier Ultra Male"},
+            {name: "Jean Lowe Noir", brand: "Maison Alhambra", family: "Holzig-Oud", kopf: "Oud, Weihrauch", herz: "Rose, Himbeere, Safran, Birke", basis: "Amber, Benzoe, Geranie", duration: "9.5h", dupeOf: "Louis Vuitton Ombre Nomade"},
+            {name: "Royal Blend Sequoia", brand: "French Avenue", family: "Blumig-Fruchtig-Gourmand", kopf: "Himbeere, Likör, Cognac", herz: "Rose, Moos", basis: "Praline, Sandelholz, Eiche", duration: "9.0h", dupeOf: "Kilian Angels' Share Paradis"},
+            {name: "Royal Blend Nero", brand: "French Avenue", family: "Oriental-Würzig", kopf: "Muskatnuss, Apfel, Dattel, Bergamotte", herz: "Zimt, Trockenes Holz, Safran", basis: "Vanille, Tonkabohne, Benzoe, Moschus", duration: "10.0h", dupeOf: "Lattafa Khamrah"},
+            {name: "After Effect", brand: "French Avenue", family: "Oriental-Würzig", kopf: "Zimt, Rum, Safran", herz: "Tabak, Safran", basis: "Sandelholz, Vanille, Hedion", duration: "8.5h", dupeOf: "Initio Side Effect"},
+            {name: "Insurrection II Wild", brand: "Reyane Tradition", family: "Oriental-Gourmand", kopf: "Honig, Tabak, Bergamotte", herz: "Vanille, Kakao, Patchouli", basis: "Amber, Labdanum, Tonkabohne", duration: "9.0h", dupeOf: "Mugler Pure Havane"},
+            {name: "Khamrah Dukhan", brand: "Lattafa", family: "Oriental-Würzig", kopf: "Mandarine, Pimento, Rauchige Gewürze", herz: "Weihrauch, Labdanum, Orangenblüte, Patchouli", basis: "Tabak, Amber, Tonkabohne, Benzoin, Praline", duration: "10.5h", dupeOf: "Lattafa Khamrah + Tom Ford Tobacco Vanille"},
+            {name: "Fierte", brand: "French Avenue", family: "Oriental-Würzig", kopf: "Weihrauch, Tabak, Safran", herz: "Gewürze, Elemi, Zedernholz", basis: "Vanille, Tonkabohne, Benzoin", duration: "12.0h", dupeOf: "YSL Babycat"},
+            {name: "Madame Cherry", brand: "Caline", family: "Gourmand-Fruchtig", kopf: "Mandel, Schwarzkirsche", herz: "Jasmin", basis: "Sandelholz, Vanille", duration: "5.0h", dupeOf: "Tom Ford Lost Cherry"},
+            {name: "Miraj Absolu", brand: "French Avenue", family: "Oriental-Holzig", kopf: "Bergamotte, Rosa Pfeffer, Mandarine", herz: "Zibeth, Geranium, Rose, Gardenie, Seerose", basis: "Guajakholz, Oud, Vanille, Kaffee, Sandelholz, Patchouli, Amber, Eichenmoos", duration: "9.0h", dupeOf: "Parfums de Marly Layton Exclusif"},
+            {name: "Amber Empire", brand: "French Avenue", family: "Oriental-Holzig", kopf: "Orientalische Noten, Vanille, Kaschmirhölzer, Likör", herz: "Amber, Zuckerrohr, Zedernholz", basis: "Labdanum, Tonkabohne, Sandelholz, Moschus", duration: "8.0h", dupeOf: "Clive Christian Blonde Amber"}
+        ];
+
+        // localStorage Keys
+        const STORAGE_KEYS = {
+            currentParfum: 'duft_current',
+            usedParfums: 'duft_used',
+            currentRound: 'duft_round',
+            history: 'duft_history',
+            lastUpdate: 'duft_lastUpdate',
+            queue: 'duft_queue'
+        };
+
+        // Initialisierung
+        function init() {
+            checkNewDay();
+            displayParfum();
+            updateStats();
+            updateHistory();
+        }
+
+        // Prüfen ob neuer Tag
+        function checkNewDay() {
+            const lastUpdate = localStorage.getItem(STORAGE_KEYS.lastUpdate);
+            const today = new Date().toDateString();
+            
+            if (lastUpdate !== today) {
+                // Neuer Tag - zeige aktuellen Duft an wenn vorhanden
+                const current = getCurrentParfum();
+                if (!current) {
+                    selectNewParfum();
+                }
+            }
+        }
+
+        // Aktuellen Duft abrufen
+        function getCurrentParfum() {
+            const stored = localStorage.getItem(STORAGE_KEYS.currentParfum);
+            return stored ? JSON.parse(stored) : null;
+        }
+
+        // Verwendete Düfte abrufen
+        function getUsedParfums() {
+            const stored = localStorage.getItem(STORAGE_KEYS.usedParfums);
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        // Aktuellen Durchgang abrufen
+        function getCurrentRound() {
+            const stored = localStorage.getItem(STORAGE_KEYS.currentRound);
+            return stored ? parseInt(stored) : 1;
+        }
+
+        // Queue abrufen oder erstellen
+        function getQueue() {
+            const stored = localStorage.getItem(STORAGE_KEYS.queue);
+            if (stored) {
+                return JSON.parse(stored);
+            } else {
+                return shuffleArray([...allParfums]);
+            }
+        }
+
+        // Array shufflen (Fisher-Yates)
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Neuen Duft auswählen
+        function selectNewParfum() {
+            let queue = getQueue();
+            const used = getUsedParfums();
+
+            // Wenn Queue leer, neuen Durchgang starten
+            if (queue.length === 0) {
+                const newRound = getCurrentRound() + 1;
+                localStorage.setItem(STORAGE_KEYS.currentRound, newRound);
+                localStorage.setItem(STORAGE_KEYS.usedParfums, JSON.stringify([]));
+                queue = shuffleArray([...allParfums]);
+            }
+
+            // Nächsten Duft aus Queue nehmen
+            const nextParfum = queue.shift();
+            
+            // Speichern
+            localStorage.setItem(STORAGE_KEYS.queue, JSON.stringify(queue));
+            localStorage.setItem(STORAGE_KEYS.currentParfum, JSON.stringify(nextParfum));
+            localStorage.setItem(STORAGE_KEYS.lastUpdate, new Date().toDateString());
+
+            // Zur Used-Liste hinzufügen
+            const newUsed = [...used, {
+                ...nextParfum,
+                date: new Date().toISOString()
+            }];
+            localStorage.setItem(STORAGE_KEYS.usedParfums, JSON.stringify(newUsed));
+
+            // History aktualisieren
+            updateHistoryStorage(nextParfum);
+
+            displayParfum();
+            updateStats();
+            updateHistory();
+        }
+
+        // History aktualisieren
+        function updateHistoryStorage(parfum) {
+            const stored = localStorage.getItem(STORAGE_KEYS.history);
+            const history = stored ? JSON.parse(stored) : [];
+            
+            history.unshift({
+                ...parfum,
+                date: new Date().toISOString()
+            });
+
+            // Nur letzte 20 behalten
+            const trimmed = history.slice(0, 20);
+            localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(trimmed));
+        }
+
+        // Duft anzeigen
+        function displayParfum() {
+            const current = getCurrentParfum();
+            const displayDiv = document.getElementById('parfumDisplay');
+            const buttonDiv = document.getElementById('buttonGroup');
+
+            if (!current) {
+                displayDiv.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🎯</div>
+                        <div class="empty-text">Bereit für deinen Duft des Tages?</div>
+                    </div>
+                `;
+                buttonDiv.innerHTML = `
+                    <button class="btn btn-primary" onclick="selectNewParfum()">
+                        🎲 Duft auswählen
+                    </button>
+                `;
+            } else {
+                displayDiv.innerHTML = `
+                    <div class="parfum-display">
+                        <div class="parfum-icon">🧴</div>
+                        <div class="parfum-name">${current.name}</div>
+                        <div class="parfum-brand">${current.brand}</div>
+                        <div class="parfum-details">
+                            <div class="detail-tag">🎨 ${current.family}</div>
+                            <div class="detail-tag">⏱️ ${current.duration}</div>
+                            <div class="detail-tag">✨ ${current.dupeOf}</div>
+                        </div>
+                        <div class="notes-box">
+                            ${current.kopf ? `<div class="note-item"><strong>🌸 Kopf:</strong> ${current.kopf}</div>` : ''}
+                            ${current.herz ? `<div class="note-item"><strong>❤️ Herz:</strong> ${current.herz}</div>` : ''}
+                            ${current.basis ? `<div class="note-item"><strong>🌳 Basis:</strong> ${current.basis}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+                buttonDiv.innerHTML = `
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="skipParfum()">
+                            ↩️ Doch nicht
+                        </button>
+                        <button class="btn btn-primary" onclick="nextDay()">
+                            ✅ Passt!
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Duft überspringen
+        function skipParfum() {
+            const current = getCurrentParfum();
+            if (!current) return;
+
+            // Aktuellen Duft zurück in Queue
+            let queue = getQueue();
+            queue.push(current);
+            
+            // Queue neu shufflen
+            queue = shuffleArray(queue);
+            localStorage.setItem(STORAGE_KEYS.queue, JSON.stringify(queue));
+
+            // Aus Used-Liste entfernen
+            const used = getUsedParfums();
+            const newUsed = used.filter(p => p.name !== current.name || p.brand !== current.brand);
+            localStorage.setItem(STORAGE_KEYS.usedParfums, JSON.stringify(newUsed));
+
+            // Aktuellen Duft löschen
+            localStorage.removeItem(STORAGE_KEYS.currentParfum);
+
+            // Neuen Duft auswählen
+            selectNewParfum();
+        }
+
+        // Nächster Tag
+        function nextDay() {
+            localStorage.removeItem(STORAGE_KEYS.currentParfum);
+            displayParfum();
+            updateStats();
+        }
+
+        // Stats aktualisieren
+        function updateStats() {
+            const used = getUsedParfums();
+            const round = getCurrentRound();
+            const totalInRound = used.length;
+            const percentage = (totalInRound / allParfums.length) * 100;
+
+            document.getElementById('progressText').textContent = `${totalInRound}/${allParfums.length} Düfte verwendet`;
+            document.getElementById('roundText').textContent = `Durchgang ${round}`;
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+            document.getElementById('totalUsed').textContent = totalInRound;
+            document.getElementById('currentRound').textContent = round;
+        }
+
+        // History anzeigen
+        function updateHistory() {
+            const stored = localStorage.getItem(STORAGE_KEYS.history);
+            const history = stored ? JSON.parse(stored) : [];
+            const historyDiv = document.getElementById('historyList');
+
+            if (history.length === 0) {
+                historyDiv.innerHTML = '<div style="padding: 20px; text-align: center; color: #999;">Noch keine Düfte verwendet</div>';
+                return;
+            }
+
+            const last10 = history.slice(0, 10);
+            historyDiv.innerHTML = last10.map(p => {
+                const date = new Date(p.date);
+                const dateStr = date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+                
+                return `
+                    <div class="history-item">
+                        <div>
+                            <div class="history-name">${p.name}</div>
+                            <div class="history-brand">${p.brand}</div>
+                        </div>
+                        <div class="history-date">${dateStr}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // History togglen
+        function toggleHistory() {
+            const content = document.getElementById('historyContent');
+            const icon = document.getElementById('historyIcon');
+            
+            content.classList.toggle('open');
+            icon.classList.toggle('open');
+        }
+
+        // Alles zurücksetzen
+        function resetAll() {
+            if (!confirm('Wirklich ALLES zurücksetzen? Das kann nicht rückgängig gemacht werden!')) {
+                return;
+            }
+
+            Object.values(STORAGE_KEYS).forEach(key => {
+                localStorage.removeItem(key);
+            });
+
+            localStorage.setItem(STORAGE_KEYS.currentRound, '1');
+            
+            init();
+        }
+
+        // Beim Laden initialisieren
+        init();
+    </script>
+</body>
+</html>
