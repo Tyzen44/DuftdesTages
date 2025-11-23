@@ -416,7 +416,8 @@
             currentRound: 'duft_round',
             history: 'duft_history',
             lastUpdate: 'duft_lastUpdate',
-            queue: 'duft_queue'
+            queue: 'duft_queue',
+            confirmed: 'duft_confirmed'
         };
 
         // Initialisierung
@@ -425,6 +426,7 @@
             displayParfum();
             updateStats();
             updateHistory();
+            scheduleMidnightReset();
         }
 
         // Prüfen ob neuer Tag
@@ -433,12 +435,28 @@
             const today = new Date().toDateString();
             
             if (lastUpdate !== today) {
-                // Neuer Tag - zeige aktuellen Duft an wenn vorhanden
-                const current = getCurrentParfum();
-                if (!current) {
-                    selectNewParfum();
-                }
+                // Neuer Tag - Reset für neuen Duft
+                localStorage.removeItem(STORAGE_KEYS.currentParfum);
+                localStorage.removeItem(STORAGE_KEYS.confirmed);
             }
+        }
+
+        // Automatischer Reset um Mitternacht
+        function scheduleMidnightReset() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const timeUntilMidnight = tomorrow - now;
+            
+            setTimeout(() => {
+                checkNewDay();
+                displayParfum();
+                updateStats();
+                // Nächsten Midnight-Reset planen
+                scheduleMidnightReset();
+            }, timeUntilMidnight);
         }
 
         // Aktuellen Duft abrufen
@@ -457,6 +475,17 @@
         function getCurrentRound() {
             const stored = localStorage.getItem(STORAGE_KEYS.currentRound);
             return stored ? parseInt(stored) : 1;
+        }
+
+        // Prüfen ob heutiger Duft bestätigt wurde
+        function isConfirmed() {
+            return localStorage.getItem(STORAGE_KEYS.confirmed) === 'true';
+        }
+
+        // Duft bestätigen
+        function confirmParfum() {
+            localStorage.setItem(STORAGE_KEYS.confirmed, 'true');
+            displayParfum();
         }
 
         // Queue abrufen oder erstellen
@@ -533,6 +562,7 @@
         // Duft anzeigen
         function displayParfum() {
             const current = getCurrentParfum();
+            const confirmed = isConfirmed();
             const displayDiv = document.getElementById('parfumDisplay');
             const buttonDiv = document.getElementById('buttonGroup');
 
@@ -566,16 +596,28 @@
                         </div>
                     </div>
                 `;
-                buttonDiv.innerHTML = `
-                    <div class="button-group">
-                        <button class="btn btn-secondary" onclick="skipParfum()">
-                            ↩️ Doch nicht
-                        </button>
-                        <button class="btn btn-primary" onclick="nextDay()">
-                            ✅ Passt!
-                        </button>
-                    </div>
-                `;
+                
+                if (confirmed) {
+                    // Duft wurde bestätigt - nur Info anzeigen
+                    buttonDiv.innerHTML = `
+                        <div style="text-align: center; padding: 20px; color: #667eea; font-weight: 600;">
+                            ✅ Duft bestätigt!<br>
+                            <span style="font-size: 14px; opacity: 0.8;">Morgen um 00:00 Uhr gibt's einen neuen Duft</span>
+                        </div>
+                    `;
+                } else {
+                    // Duft nicht bestätigt - Buttons zeigen
+                    buttonDiv.innerHTML = `
+                        <div class="button-group">
+                            <button class="btn btn-secondary" onclick="skipParfum()">
+                                ↩️ Doch nicht
+                            </button>
+                            <button class="btn btn-primary" onclick="confirmParfum()">
+                                ✅ Passt!
+                            </button>
+                        </div>
+                    `;
+                }
             }
         }
 
@@ -597,18 +639,12 @@
             const newUsed = used.filter(p => p.name !== current.name || p.brand !== current.brand);
             localStorage.setItem(STORAGE_KEYS.usedParfums, JSON.stringify(newUsed));
 
-            // Aktuellen Duft löschen
+            // Aktuellen Duft und confirmed-Status löschen
             localStorage.removeItem(STORAGE_KEYS.currentParfum);
+            localStorage.removeItem(STORAGE_KEYS.confirmed);
 
             // Neuen Duft auswählen
             selectNewParfum();
-        }
-
-        // Nächster Tag
-        function nextDay() {
-            localStorage.removeItem(STORAGE_KEYS.currentParfum);
-            displayParfum();
-            updateStats();
         }
 
         // Stats aktualisieren
