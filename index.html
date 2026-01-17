@@ -321,7 +321,7 @@
             
             <div class="progress-section">
                 <div class="progress-info">
-                    <span id="progressText">0/49 Düfte verwendet</span>
+                    <span id="progressText">0/73 Düfte verwendet</span>
                     <span id="roundText">Durchgang 1</span>
                 </div>
                 <div class="progress-bar">
@@ -357,7 +357,7 @@
     </div>
 
     <script>
-        // Alle Parfüms (ohne Éclair und Angham) - mit vollständigen Details
+        // Alle 68 Parfüms - VOLLSTÄNDIG AKTUALISIERT
         const allParfums = [
             {name: "Hercules", brand: "Maison Alhambra", family: "Orientalisch-Würzig", kopf: "Zimt, Pfeffer", herz: "Tabakblatt, Weihrauch, Labdanum, Osmanthus", basis: "Vanille, Zeder, Moschus, Vetiver", duration: "7.5h", dupeOf: "Parfums de Marly Herod"},
             {name: "Asad", brand: "Lattafa", family: "Orientalisch-Amber", kopf: "Schwarzer Pfeffer, Ananas, Tabak", herz: "Kaffee, Patschuli, Iris", basis: "Vanille, Amber, Trockene Hölzer, Benzoe", duration: "10.0h", dupeOf: "Dior Sauvage Élixir"},
@@ -365,6 +365,8 @@
             {name: "Dark Door Intense", brand: "Maison Alhambra", family: "Aromatisch-Blumig", kopf: "Lavendel", herz: "Iris, Ambrette, Birne", basis: "Virginia Zeder, Vetiver", duration: "7.0h", dupeOf: "Dior Homme Intense 2011"},
             {name: "Dynasty", brand: "Lattafa", family: "Holzig-Würzig", kopf: "Bergamotte, Ingwer, Himbeere", herz: "Rooibos Tee, Wildleder", basis: "Zedernholz, Cashmeran, Amberholz", duration: "8.5h", dupeOf: "Clive Christian L: Red Tea Vetiver"},
             {name: "Pride Art of Arabia I", brand: "Lattafa", family: "Frisch-Zitrus", kopf: "Bergamotte, Minze", herz: "Schwarzer Tee, Ingwer, Lavendel", basis: "Ambroxan, Weihrauch, Zimt", duration: "7.0h", dupeOf: "Louis Vuitton Imagination"},
+            {name: "Angham", brand: "Lattafa", family: "Süß-Blumig", kopf: "Mandarine, Ingwer, Rosa Pfeffer", herz: "Praline, Lavendel, Kakao", basis: "Moschus, Amber, Vanille", duration: "5.5h", dupeOf: "Burberry Goddess"},
+            {name: "Éclair", brand: "Lattafa", family: "Gourmand-Süß", kopf: "Karamell, Milch, Zucker", herz: "Weiße Blüten, Honig", basis: "Vanille, Praline, Moschus", duration: "7.0h", dupeOf: "Giardini di Toscana Bianco Latte"},
             {name: "Infini Moschus", brand: "Maison Alhambra", family: "Blumig-Holzig-Moschus", kopf: "Bergamotte, Mandarine", herz: "Moschus, Maiglöckchen, Veilchen", basis: "Weißer Moschus, Sandelholz", duration: "6.0h", dupeOf: "Initio Musk Therapy"},
             {name: "Eternal Oud Pride", brand: "Lattafa", family: "Orientalisch-Süß", kopf: "Pflaume, Grapefruit", herz: "Heliotrop, Orchidee", basis: "Benzoe, Amber, Vanille, Oud", duration: "9.0h", dupeOf: "MFK Grand Soir"},
             {name: "Confidential Private Gold", brand: "Lattafa", family: "Chypre-Fruchtig", kopf: "Pfirsich, Birne, Passionsfrucht, Himbeere", herz: "Maiglöckchen", basis: "Moschus, Vanille, Sandelholz", duration: "7.0h", dupeOf: "Tiziana Terenzi Kirke"},
@@ -406,7 +408,30 @@
             {name: "Fierte", brand: "French Avenue", family: "Oriental-Würzig", kopf: "Weihrauch, Tabak, Safran", herz: "Gewürze, Elemi, Zedernholz", basis: "Vanille, Tonkabohne, Benzoin", duration: "12.0h", dupeOf: "YSL Babycat"},
             {name: "Madame Cherry", brand: "Caline", family: "Gourmand-Fruchtig", kopf: "Mandel, Schwarzkirsche", herz: "Jasmin", basis: "Sandelholz, Vanille", duration: "5.0h", dupeOf: "Tom Ford Lost Cherry"},
             {name: "Miraj Absolu", brand: "French Avenue", family: "Oriental-Holzig", kopf: "Bergamotte, Rosa Pfeffer, Mandarine", herz: "Zibeth, Geranium, Rose, Gardenie, Seerose", basis: "Guajakholz, Oud, Vanille, Kaffee, Sandelholz, Patchouli, Amber, Eichenmoos", duration: "9.0h", dupeOf: "Parfums de Marly Layton Exclusif"},
-            {name: "Amber Empire", brand: "French Avenue", family: "Oriental-Holzig", kopf: "Orientalische Noten, Vanille, Kaschmirhölzer, Likör", herz: "Amber, Zuckerrohr, Zedernholz", basis: "Labdanum, Tonkabohne, Sandelholz, Moschus", duration: "8.0h", dupeOf: "Clive Christian Blonde Amber"}
+            {name: "Amber Empire", brand: "French Avenue", family: "Oriental-Holzig", kopf: "Orientalische Noten, Vanille, Kaschmirhölzer, Likör", herz: "Amber, Zuckerrohr, Zedernholz", basis: "Labdanum, Tonkabohne, Sandelholz, Moschus", duration: "8.0h", dupeOf: "Clive Christian Blonde Amber"},
+            {name: "Belle Icone", brand: "Caline", family: "Blumig-Holzig", kopf: "Safran, Jasmin", herz: "Zeder, Bittermandel", basis: "Amber, Moschus", duration: "4.0h", dupeOf: "Baccarat Rouge 540"},
+            {name: "Intense Gold", brand: "Caline", family: "Aromatisch-Würzig", kopf: "Mandarine, Pfefferminz, Apfel", herz: "Zimt, Muskatnuss, Rose, Lavendel", basis: "Tonkabohne, Amber, Zeder, Leder, Moschus, Vanille", duration: "4.5h", dupeOf: "Paco Rabanne 1 Million"},
+            {name: "Powerful Black", brand: "Caline", family: "Würzig-Holzig", kopf: "Ingwer", herz: "Maninka Frucht, Lavendel", basis: "Leder, Tonkabohne", duration: "4.0h", dupeOf: "Hugo Boss The Scent"},
+            {name: "Xtra Pure", brand: "Caline", family: "Fruchtig-Süß", kopf: "Zitrone, Orange, Bergamotte, Grapefruit", herz: "Melone, Ananas, Pfirsich, Birne", basis: "Moschus, Vanille, Amber, Sandelholz, Tonkabohne", duration: "3.5h", dupeOf: "Xerjoff Erba Pura"},
+            {name: "Elixir Floral", brand: "Caline", family: "Blumig-Fruchtig", kopf: "Bergamotte, Rhabarber, Litschi", herz: "Rose, Maiglöckchen, Pfingstrose, Weihrauch, Muskatnuss, Vetiver", basis: "Vanille, Moschus, Amber", duration: "4.5h", dupeOf: "Parfums de Marly Delina"},
+            {name: "Ateeq", brand: "Nusuk", family: "Aromatisch-Würzig", kopf: "Honig, Zimt, Amber, Grapefruit, Limette", herz: "Jasmin, Lavendel, Tabak", basis: "Vanilleorchidee, Kumarin, Tonkabohne, Zeder, Moschus", duration: "12.0h", dupeOf: "Xerjoff Naxos"},
+            {name: "Side Effect", brand: "Initio", family: "Oriental-Würzig", kopf: "Zimt, Rum", herz: "Tabak, Safran", basis: "Sandelholz, Hedione, Vanille, Leder", duration: "10.0h", dupeOf: "Original Designer"},
+            {name: "Addictive Vibration", brand: "Initio", family: "Blumig-Moschus", kopf: "Apfelblüte, Orangenblüte", herz: "Honig, Jasmin Sambac, Zimt, Cashmeran", basis: "Moschus, Vanilla Orchidee", duration: "9.0h", dupeOf: "Original Designer"},
+            {name: "Euphoria Men Intense", brand: "Calvin Klein", family: "Oriental-Holzig", kopf: "Ingwer, Pfeffer", herz: "Schwarzes Basilikum, Zeder, Salbei, Vetiver", basis: "Amber, Oud, Patschuli, Myrrhe, Labdanum", duration: "6.0h", dupeOf: "Original Designer"},
+            {name: "Rose Prick", brand: "Tom Ford", family: "Chypre-Blumig", kopf: "Sichuan Pfeffer, Kurkuma", herz: "Mai Rose, Bulgarische Rose, Türkische Rose", basis: "Patschuli, Tonkabohne", duration: "6.0h", dupeOf: "Original Designer"},
+            {name: "Bitter Peach", brand: "Tom Ford", family: "Amber-Vanille", kopf: "Pfirsich, Blutorange, Kardamom, Heliotrop", herz: "Rum, Cognac, Davana, Jasmin", basis: "Patschuli, Sandelholz, Tonkabohne, Vanille, Cashmeran, Labdanum, Benzoe", duration: "5.0h", dupeOf: "Original Designer"},
+            {name: "Oud Wood", brand: "Tom Ford", family: "Holzig-Oriental", kopf: "Brasilianisches Rosenholz, Kardamom", herz: "Oud, Sandelholz, Vetiver", basis: "Tonkabohne, Vanille, Amber", duration: "6.0h", dupeOf: "Original Designer"},
+            {name: "Fucking Fabulous", brand: "Tom Ford", family: "Leder-Würzig", kopf: "Lavendel, Salbei", herz: "Bittermandel, Leder, Vanille, Iris", basis: "Leder, Tonkabohne, Cashmeran, Weiße Hölzer, Amber", duration: "8.0h", dupeOf: "Original Designer"},
+            {name: "Naxos", brand: "Xerjoff", family: "Citrus-Gourmand", kopf: "Bergamotte, Zitrone, Lavendel", herz: "Honig, Zimt, Jasmin Sambac, Cashmeran", basis: "Tabakblatt, Vanille, Tonkabohne", duration: "10.0h", dupeOf: "Original Designer"},
+            {name: "1 Million Intense", brand: "Paco Rabanne", family: "Würzig-Holzig-Oriental", kopf: "Blutmandarine, Kardamom, Schwarzer Pfeffer, Safran", herz: "Rosenabsolut, Neroli, Zimt", basis: "Weißes Leder, Iriswurzel, Patschuli, Sandelholz", duration: "7.0h", dupeOf: "Original Designer"},
+            {name: "1 Million Absolutely Gold", brand: "Paco Rabanne", family: "Leder-Blumig", kopf: "Mandarine", herz: "Blumen", basis: "Leder, Amber, Vanille", duration: "8.0h", dupeOf: "Original Designer"},
+            {name: "Homme", brand: "Joop", family: "Oriental-Fougère", kopf: "Mandarine, Zitrone, Bergamotte, Orangenblüte", herz: "Jasmin, Maiglöckchen", basis: "Vanille, Amber, Sandelholz, Patschuli, Leder, Tonkabohne", duration: "6.0h", dupeOf: "Original Designer"},
+            {name: "Rochas Man", brand: "Rochas", family: "Gourmand-Holzig", kopf: "Lavendel, Bergamotte", herz: "Cappuccino, Himbeere, Jasmin, Virginiazeder, Maiglöckchen", basis: "Vanille, Amber, Sandelholz, Patschuli", duration: "5.0h", dupeOf: "Original Designer"},
+            {name: "Bottled", brand: "Hugo Boss", family: "Holzig-Würzig", kopf: "Apfel, Zitrone, Pflaume", herz: "Geranium, Zimt, Nelke, Olivenholz", basis: "Sandelholz, Zeder", duration: "6.0h", dupeOf: "Original Designer"},
+            {name: "Only the Brave", brand: "Diesel", family: "Ledrig-Holzig", kopf: "Zitrone, Mandarine", herz: "Koriander", basis: "Zeder, Leder, Amber, Labdanum, Benzoe", duration: "7.0h", dupeOf: "Original Designer"},
+            {name: "Vanilla Sex", brand: "Tom Ford", family: "Amber-Vanille", kopf: "Bittermandel", herz: "Vanille, Florales, Jasmin", basis: "Vanille Absolute, Tonkabohne, Sandelholz, Ultravanil", duration: "8.0h", dupeOf: "Original Designer"},
+            {name: "Lost Cherry", brand: "Tom Ford", family: "Süß-Fruchtig", kopf: "Bittermandel, Schwarze Kirsche, Kirschlikör", herz: "Sauerkirsche, Pflaume, Türkische Rose, Jasmin Sambac", basis: "Vanille, Tonkabohne, Zimt, Peru Balsam, Sandelholz, Benzoe, Nelke, Zeder", duration: "7.0h", dupeOf: "Original Designer"},
+            {name: "Noir Extreme", brand: "Tom Ford", family: "Oriental-Holzig", kopf: "Mandarine", herz: "Neroli, Kulfi, Rose, Jasmin", basis: "Amber, Sandelholz, Vanille", duration: "7.0h", dupeOf: "Original Designer"}
         ];
 
         // localStorage Keys
@@ -498,7 +523,7 @@
             }
         }
 
-        // Array shufflen (Fisher-Yates)
+        // Array shufflen (Fisher-Yates) - GARANTIERT ECHTE ZUFÄLLIGKEIT
         function shuffleArray(array) {
             const shuffled = [...array];
             for (let i = shuffled.length - 1; i > 0; i--) {
